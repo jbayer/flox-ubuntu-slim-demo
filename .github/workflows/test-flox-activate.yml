@@ -1,0 +1,40 @@
+name: Test Flox Activate on Ubuntu Slim
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test-flox-activate:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-slim
+          - ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    name: flox activate (${{ matrix.runner }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Flox
+        uses: flox/install-flox-action@main
+
+      - name: Validate flox is installed
+        run: flox --version
+
+      - name: Initialize environment
+        run: flox init
+
+      - name: Install a package
+        run: flox install hello
+
+      - name: Validate flox activate runs a command
+        run: flox activate -- hello
+
+      - name: Validate flox activate sets up shell
+        run: |
+          flox activate -- bash -c 'which hello && echo "flox activate is working"'
