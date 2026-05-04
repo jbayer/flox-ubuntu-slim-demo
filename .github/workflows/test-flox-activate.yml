@@ -21,7 +21,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Flox
-        uses: flox/install-flox-action@main
+        # Pinned to PR #195 branch which adds /nix ownership fix for
+        # single-user Nix on systemd-less runners (ubuntu-slim).
+        # Switch back to @main once the PR is merged.
+        uses: flox/install-flox-action@feature/action/ubuntu-slim-test
 
       - name: Validate flox is installed
         run: flox --version
